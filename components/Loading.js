@@ -1,7 +1,7 @@
 export default function Loading() {
   return (
     <>
-      /* From Uiverse.io by Nawsome */
+      {/* /* From Uiverse.io by Nawsome */}
       <svg
         class="pl"
         viewBox="0 0 160 160"
