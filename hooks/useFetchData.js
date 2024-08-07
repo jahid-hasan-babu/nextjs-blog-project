@@ -1,7 +1,7 @@
 const { default: axios } = require("axios");
 const { useState, useEffect } = require("react");
 
-function useFetchData() {
+function useFetchData(apiEndPoint) {
   const [alldata, setAlldata] = useState([]);
   const [loading, setLoading] = useState(true);
   const [initialLoad, setInitialLoad] = useState(true);

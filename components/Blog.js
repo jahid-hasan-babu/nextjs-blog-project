@@ -200,6 +200,7 @@ export default function Blog({
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
+            <option value="">No Select</option>
             <option value="draft">Draft</option>
             <option value="publish">Publish</option>
           </select>
