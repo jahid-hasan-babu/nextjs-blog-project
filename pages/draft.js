@@ -12,15 +12,10 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 export default function Draft() {
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage] = useState(4);
+  const [perPage] = useState(6);
 
   //fetchblogs
   const [alldata, loading] = useFetchData("/api/blogapi");
-
-  // Debug log for fetched data
-  useEffect(() => {
-    console.log("All data fetched: ", alldata);
-  }, [alldata]);
 
   //function to handle page change
   const paginate = (pageNumber) => {
@@ -35,11 +30,6 @@ export default function Draft() {
 
   //filtering draft blogs
   const draftBlogs = currentBlogs.filter((ab) => ab.status === "draft");
-
-  // Debug log for filtered draft blogs
-  useEffect(() => {
-    console.log("Draft blogs: ", draftBlogs);
-  }, [currentBlogs]);
 
   const allblog = alldata ? alldata.length : 0;
 
@@ -111,7 +101,7 @@ export default function Draft() {
                     ) : (
                       draftBlogs.map((blog, index) => (
                         <tr key={blog._id}>
-                          <td>{index + 1}</td>
+                          <td>{indexOfFirstBlog + index + 1}</td>
                           <td>{blog.title}</td>
                           <td>{blog.slug}</td>
                           <td>
