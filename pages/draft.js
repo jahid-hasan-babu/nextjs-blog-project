@@ -24,14 +24,12 @@ export default function Draft() {
 
   const indexOfLastBlog = currentPage * perPage;
   const indexOfFirstBlog = indexOfLastBlog - perPage;
-  const currentBlogs = alldata
-    ? alldata.slice(indexOfFirstBlog, indexOfLastBlog)
-    : [];
+  const currentBlogs = alldata.slice(indexOfFirstBlog, indexOfLastBlog);
 
   //filtering draft blogs
   const draftBlogs = currentBlogs.filter((ab) => ab.status === "draft");
 
-  const allblog = alldata ? alldata.length : 0;
+  const allblog = alldata.length;
 
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(allblog / perPage); i++) {

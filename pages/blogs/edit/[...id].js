@@ -1,4 +1,5 @@
 import Blog from "@/components/Blog";
+import Loading from "@/components/Loading";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
@@ -8,7 +9,6 @@ import { BsPostcard } from "react-icons/bs";
 
 export default function EditBlog() {
   //login first
-
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -30,6 +30,7 @@ export default function EditBlog() {
   //blog edit function
   const { id } = router.query;
   const [productInfo, setProductInfo] = useState(null);
+
   useEffect(() => {
     if (!id) {
       return;
@@ -39,6 +40,7 @@ export default function EditBlog() {
       });
     }
   }, [id]);
+
   if (session) {
     return (
       <>
@@ -48,16 +50,25 @@ export default function EditBlog() {
         <div className="blogpage">
           <div className="titledashboard flex flex-sb">
             <div>
-              <h2>
-                Edit <span>{productInfo.title}</span>
-              </h2>
+              {productInfo ? (
+                <h2>
+                  Edit{" "}
+                  <span>
+                    {productInfo.title} <span>Blogs</span>
+                  </span>
+                </h2>
+              ) : (
+                <h2>Loading Blog...</h2>
+              )}
               <h3>ADMIN PANEL</h3>
             </div>
             <div className="breadcrumb">
               <BsPostcard /> <span>/</span> <span>Edit Blogs</span>
             </div>
           </div>
-          <div className="mt-3">{productInfo && <Blog {...productInfo} />}</div>
+          <div className="mt-3">
+            {productInfo ? <Blog {...productInfo} /> : <p>Loading...</p>}
+          </div>
         </div>
       </>
     );

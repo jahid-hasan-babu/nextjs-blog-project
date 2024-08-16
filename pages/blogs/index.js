@@ -26,17 +26,13 @@ export default function blogs() {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
   const indexOfLastBlog = currentPage * perPage;
   const indexOfFirstBlog = indexOfLastBlog - perPage;
-  const currentBlogs = alldata
-    ? alldata.slice(indexOfFirstBlog, indexOfLastBlog)
-    : [];
-
+  const currentBlogs = alldata.slice(indexOfFirstBlog, indexOfLastBlog);
   //filtering published blogs
   const publishedBlogs = currentBlogs.filter((ab) => ab.status === "publish");
 
-  const allblog = alldata ? alldata.length : 0;
+  const allblog = alldata.length;
 
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(allblog / perPage); i++) {
