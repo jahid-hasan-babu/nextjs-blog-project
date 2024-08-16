@@ -11,13 +11,10 @@ import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 
 export default function blogs() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage] = useState(6);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [perPage] = useState(5);
 
   //fetchblogs
   const [alldata, loading] = useFetchData("/api/blogapi");
@@ -26,18 +23,32 @@ export default function blogs() {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  const indexOfLastBlog = currentPage * perPage;
-  const indexOfFirstBlog = indexOfLastBlog - perPage;
-  const currentBlogs = alldata.slice(indexOfFirstBlog, indexOfLastBlog);
-  //filtering published blogs
-  const publishedBlogs = currentBlogs.filter((ab) => ab.status === "publish");
 
   const allblog = alldata.length;
+
+  //search function
+  const filterBlog =
+    searchQuery.trim() === ""
+      ? alldata
+      : alldata.filter((blog) =>
+          blog.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+  const indexOfFirstBlog = (currentPage - 1) * perPage;
+  const indexOfLastBlog = currentPage * perPage;
+
+  const currentBlogs = filterBlog.slice(indexOfFirstBlog, indexOfLastBlog);
+  //filtering published blogs
+
+  const publishedBlogs = currentBlogs.filter((ab) => ab.status === "publish");
 
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(allblog / perPage); i++) {
     pageNumbers.push(i);
   }
+
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (!session) {

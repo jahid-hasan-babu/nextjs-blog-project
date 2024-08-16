@@ -103,7 +103,9 @@ export default function Blog({
           </select>
           <p className="existingcategory flex gap-1 mt-1 mb-1">
             <span>
-              selected: <span>category</span>
+              selected:
+              {Array.isArray(existingBlogCategory) &&
+                existingBlogCategory.map((category) => <span>{category}</span>)}
             </span>
           </p>
         </div>
@@ -186,7 +188,9 @@ export default function Blog({
           </select>
           <p className="existingcategory flex gap-1 mt-1 mb-1">
             <span>
-              selected: <span>Tags</span>
+              selected:{" "}
+              {Array.isArray(existingTags) &&
+                existingTags.map((category) => <span>{category}</span>)}
             </span>
           </p>
         </div>
@@ -206,7 +210,7 @@ export default function Blog({
           </select>
           <p className="existingcategory flex gap-1 mt-1 mb-1">
             <span>
-              selected: <span>Status</span>
+              selected: <span>{status}</span>
             </span>
           </p>
         </div>

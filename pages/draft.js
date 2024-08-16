@@ -12,7 +12,8 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 export default function Draft() {
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage] = useState(6);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [perPage] = useState(5);
 
   //fetchblogs
   const [alldata, loading] = useFetchData("/api/blogapi");
@@ -22,14 +23,23 @@ export default function Draft() {
     setCurrentPage(pageNumber);
   };
 
-  const indexOfLastBlog = currentPage * perPage;
-  const indexOfFirstBlog = indexOfLastBlog - perPage;
-  const currentBlogs = alldata.slice(indexOfFirstBlog, indexOfLastBlog);
-
-  //filtering draft blogs
-  const draftBlogs = currentBlogs.filter((ab) => ab.status === "draft");
-
   const allblog = alldata.length;
+
+  //search function
+  const filterBlog =
+    searchQuery.trim() === ""
+      ? alldata
+      : alldata.filter((blog) =>
+          blog.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+  const indexOfFirstBlog = (currentPage - 1) * perPage;
+  const indexOfLastBlog = currentPage * perPage;
+
+  const currentBlogs = filterBlog.slice(indexOfFirstBlog, indexOfLastBlog);
+  //filtering published blogs
+
+  const draftBlogs = currentBlogs.filter((ab) => ab.status === "draft");
 
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(allblog / perPage); i++) {
@@ -106,12 +116,12 @@ export default function Draft() {
                             <div className="flex gap-2 flex-center">
                               <Link href={`/blogs/edit/${blog._id}`}>
                                 <button title="edit">
-                                  <FaEdit />
+                                  <FaEdit /> Edit
                                 </button>
                               </Link>
                               <Link href={`/blogs/delete/${blog._id}`}>
                                 <button title="delete">
-                                  <RiDeleteBin6Fill />
+                                  <RiDeleteBin6Fill /> Delete
                                 </button>
                               </Link>
                             </div>
