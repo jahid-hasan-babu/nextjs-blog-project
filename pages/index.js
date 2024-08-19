@@ -1,11 +1,23 @@
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IoHome } from "react-icons/io5";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  BarElement,
+  Title,
+  Tooltip,
+  LineController,
+  Legend,
+  LinearScale,
+} from "chart.js";
+import Loading from "@/components/Loading";
+import { Bar } from "react-chartjs-2";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -14,12 +26,101 @@ export default function Home() {
     }
   }, [session, router]);
 
+  ChartJS.register(
+    CategoryScale,
+    LineController,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+
+  const [blogsData, setBlogsData] = useState([]);
+  const [totalBlogs, setTotalBlogs] = useState(0); // State for total blogs
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/blogapi");
+        const data = await response.json();
+        setBlogsData(data);
+        setTotalBlogs(data.length); // Set the total number of blogs
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Blogs Created Monthly By Year",
+      },
+    },
+  };
+
+  const monthlydata = blogsData
+    .filter((dat) => dat.status === "publish")
+    .reduce((acc, blog) => {
+      const year = new Date(blog.createdAt).getFullYear();
+      const month = new Date(blog.createdAt).getMonth();
+      acc[year] = acc[year] || Array(12).fill(0);
+      acc[year][month]++;
+      return acc;
+    }, {});
+
+  const currentYear = new Date().getFullYear();
+  const years = Object.keys(monthlydata);
+  const labels = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const datasets = years.map((year) => ({
+    label: `${year}`,
+    data: monthlydata[year] || Array(12).fill(0),
+    backgroundColor: `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
+      Math.random() * 256
+    )}, ${Math.floor(Math.random() * 256)}, 0.5)`,
+  }));
+
+  const data = {
+    labels,
+    datasets,
+  };
+
+  if (status === "loading") {
+    return (
+      <div className="loadingdata flex flex-col flex-center wh_100">
+        <Loading />
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
+
   if (session) {
     return (
       <>
         <Head>
-          <title>Admin Dashboard </title>
-          <meta name="description" content="admin dashboard  next app" />
+          <title>Admin Dashboard</title>
+          <meta name="description" content="admin dashboard next app" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
@@ -38,7 +139,7 @@ export default function Home() {
           <div className="topfourcards flex flex-sb">
             <div className="four_card">
               <h2>Total Blogs</h2>
-              <span>10</span>
+              <span>{totalBlogs}</span> {/* Display total number of blogs */}
             </div>
             <div className="four_card">
               <h2>Total Topics</h2>
@@ -46,11 +147,13 @@ export default function Home() {
             </div>
             <div className="four_card">
               <h2>Total Tags</h2>
-              <span>6</span>
+              <span>2</span>
             </div>
             <div className="four_card">
               <h2>Draft Blogs</h2>
-              <span>10</span>
+              <span>
+                {blogsData.filter((ab) => ab.status === "draft").length}
+              </span>
             </div>
           </div>
           <div className="year_overview flex flex-sb">
@@ -66,9 +169,12 @@ export default function Home() {
                   <li className="small-dot"></li>
                 </ul>
                 <h3 className="text-right">
-                  10 / 365 <br /> <span>Total Published</span>
+                  {blogsData.filter((ab) => ab.status === "publish").length} /
+                  365
+                  <br /> <span>Total Published</span>
                 </h3>
               </div>
+              <Bar data={data} options={options} />
             </div>
             <div className="right_salescont">
               <div>
@@ -82,6 +188,7 @@ export default function Home() {
                   <li className="small-dot"></li>
                 </ul>
               </div>
+
               <div className="blogscategory flex flex-center">
                 <table>
                   <thead>
