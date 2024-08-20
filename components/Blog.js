@@ -63,7 +63,7 @@ export default function Blog({
     <>
       <form className="addWebsiteform" onSubmit={createProduct}>
         {/* blog title */}
-        <div className="w-100 flex flex-col flex-left mb-2">
+        <div className="w-100 flex flex-col flex-left mb-2" data-aos="fade-up">
           <label htmlFor="title">Title</label>
           <input
             type="text"
@@ -74,7 +74,7 @@ export default function Blog({
           />
         </div>
         {/* blog slug  */}
-        <div className="w-100 flex flex-col flex-left mb-2">
+        <div className="w-100 flex flex-col flex-left mb-2" data-aos="fade-up">
           <label htmlFor="slug">Slug</label>
           <input
             type="text"
@@ -87,7 +87,7 @@ export default function Blog({
         </div>
 
         {/* blog category  */}
-        <div className="w-100 flex flex-col flex-left mb-2">
+        <div className="w-100 flex flex-col flex-left mb-2" data-aos="fade-up">
           <label htmlFor="blogCategory">Category</label>
           <select
             name="blogCategory"
@@ -166,7 +166,7 @@ export default function Blog({
         </div>
 
         {/* blog tags  */}
-        <div className="w-100 flex flex-col flex-left mb-2">
+        <div className="w-100 flex flex-col flex-left mb-2" data-aos="fade-up">
           <label htmlFor="tags">Tags</label>
           <select
             name="tags"

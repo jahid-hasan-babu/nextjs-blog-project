@@ -33,18 +33,18 @@ export default function Setting() {
       <>
         <div className="settingpage">
           <div className="titledashboard flex flex-sb">
-            <div>
+            <div data-aos="fade-right">
               <h2>
                 Admin <span>Settings</span>
               </h2>
               <h3>ADMIN PANEL</h3>
             </div>
-            <div className="breadcrumb">
+            <div className="breadcrumb" data-aos="fade-left">
               <IoSettingsOutline /> <span>/</span> <span>Dashboard</span>
             </div>
           </div>
           <div className="profilesettings">
-            <div className="leftprofile_details flex">
+            <div className="leftprofile_details flex" data-aos="fade-up">
               <img src="/img/resume.png" alt="coder" />
               <div className="w-100">
                 <div className="flex flex-sb flex-left mt-2">
@@ -67,7 +67,7 @@ export default function Setting() {
               </div>
             </div>
             <div className="rightlogoutnsec">
-              <div className="topaccoutnbox">
+              <div className="topaccoutnbox" data-aos="fade-up">
                 <h2 className="flex flex-sb">
                   My Account <MdOutlineAccountCircle />
                 </h2>
